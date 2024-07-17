@@ -1,1 +1,1 @@
-test('');
+test('can parse simple args', () => {});

@@ -1,8 +1,18 @@
 {
+  "editor.defaultFormatter": "esbenp.prettier-vscode",
   "editor.formatOnPaste": true,
   "editor.formatOnSave": true,
   "editor.formatOnType": true,
   "editor.insertSpaces": true,
   "editor.tabSize": 2,
+  "editor.codeActionsOnSave": {
+    "source.addMissingImports.ts": "always",
+    "source.fixAll.eslint": "always",
+    "source.fixAll.ts": "always",
+    "source.organizeImports": "always",
+    "source.removeUnused.ts": "never",
+    "source.removeUnusedImports": "always",
+    "source.sortImports": "always"
+  },
   "files.eol": "\n"
 }
