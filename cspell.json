@@ -34,7 +34,8 @@
     "commitlint",
     "conventionalcommits",
     "pino",
-    "prestart"
+    "prestart",
+    "tsyringe"
   ],
   "flagWords": []
 }

@@ -9,10 +9,10 @@
     "source.addMissingImports.ts": "always",
     "source.fixAll.eslint": "always",
     "source.fixAll.ts": "always",
-    "source.organizeImports": "always",
+    "source.organizeImports": "never",
     "source.removeUnused.ts": "never",
     "source.removeUnusedImports": "always",
-    "source.sortImports": "always"
+    "source.sortImports": "never"
   },
   "files.eol": "\n"
 }

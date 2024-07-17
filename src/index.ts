@@ -1,10 +1,13 @@
+import 'reflect-metadata';
+import {Logger} from 'pino';
+import {container, inject, injectable, singleton} from 'tsyringe';
 import {config} from './config';
 import {logger} from './logger';
 import {profilerDecorator} from './profiler-decorator';
 
 class Argument {
   constructor(
-    public readonly name: string,
+    public readonly key: string,
     public readonly value: string
   ) {}
 }
@@ -12,8 +15,8 @@ class Argument {
 class Namespace {
   constructor(private args: Argument[]) {}
 
-  getValue(key: string): string {
-    return this.args.filter(x => x.name === key)[0].value;
+  getValue(key: string): string | undefined {
+    return this.args.find(x => x.key === key)?.value;
   }
 }
 
@@ -33,10 +36,11 @@ class ArgumentDescriptor {
   }
 }
 
+@injectable()
 class ArgumentParser {
   private readonly args: ArgumentDescriptor[] = [];
 
-  constructor() {}
+  constructor(@inject('logger') private readonly logger: Logger) {}
 
   @profilerDecorator
   parse(argv: string[]): Namespace {
@@ -61,17 +65,26 @@ class ArgumentParser {
       }
     }
 
-    logger.debug('END PARSING');
+    this.logger.debug('END PARSING');
 
     return new Namespace(args);
   }
 }
 
-logger.info('BEGIN');
+@singleton()
+class Program {
+  constructor(@inject('logger') private readonly logger: Logger) {}
 
-logger.debug({env: config.get('env'), debug: config.get('debug')});
+  @profilerDecorator
+  main(argv: string[]) {
+    this.logger.info('BEGIN');
+    this.logger.debug({env: config.get('env'), debug: config.get('debug')});
 
-const parser = new ArgumentParser();
-parser.parse(process.argv);
+    const parser = container.resolve(ArgumentParser);
+    parser.parse(argv);
 
-logger.info('DONE');
+    this.logger.info('DONE');
+  }
+}
+
+container.resolve(Program).main(process.argv);
