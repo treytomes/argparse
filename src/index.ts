@@ -1,44 +1,16 @@
-import 'reflect-metadata';
 import {Logger} from 'pino';
+import 'reflect-metadata';
 import {container, inject, injectable, singleton} from 'tsyringe';
+import {Argument, IArgument} from './argument';
+import {IArgumentDescriptor} from './argument-descriptor';
 import {config} from './config';
 import {logger} from './logger';
+import {Namespace} from './namespace';
 import {profilerDecorator} from './profiler-decorator';
-
-class Argument {
-  constructor(
-    public readonly key: string,
-    public readonly value: string
-  ) {}
-}
-
-class Namespace {
-  constructor(private args: Argument[]) {}
-
-  getValue(key: string): string | undefined {
-    return this.args.find(x => x.key === key)?.value;
-  }
-}
-
-class ArgumentDescriptor {
-  constructor(
-    public readonly names: string[],
-    private readonly caseSensitive = true
-  ) {}
-
-  canMatch(text: string): boolean {
-    if (this.caseSensitive) {
-      return this.names.filter(x => x === text).length > 0;
-    } else {
-      text = text.toLowerCase();
-      return this.names.filter(x => x.toLowerCase() === text).length > 0;
-    }
-  }
-}
 
 @injectable()
 class ArgumentParser {
-  private readonly args: ArgumentDescriptor[] = [];
+  private readonly args: IArgumentDescriptor[] = [];
 
   constructor(@inject('logger') private readonly logger: Logger) {}
 
@@ -49,7 +21,7 @@ class ArgumentParser {
     const textArgs = argv.slice(2);
     logger.debug({textArgs}, 'BEGIN PARSING');
 
-    const args: Argument[] = [];
+    const args: IArgument[] = [];
 
     let argvIndex = 0;
     while (argvIndex < textArgs.length) {
