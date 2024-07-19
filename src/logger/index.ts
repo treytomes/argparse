@@ -11,7 +11,7 @@ type LogFunction = {
   (msg: string, ...args: any[]): void;
 };
 
-type Logger = {
+export type Logger = {
   info: LogFunction;
   error: LogFunction;
   debug: LogFunction;

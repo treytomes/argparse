@@ -1,3 +1,4 @@
+import 'reflect-metadata';
 import {logger} from './index';
 
 test('can create logger', () => {
